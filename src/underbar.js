@@ -103,6 +103,22 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var result = [];
+    var notSorted = function(item, index, array) {
+      if (!(item in result)) {
+        result.push(item);
+      }
+    }
+    var sorted = function(item, index, array) {
+      var current 
+      if (array[i] !== current) {
+        current = array[i];
+        result.push(array[i]);
+      }
+    }
+    var chosenSort = arguments[2] ? sorted : notSorted;
+    _.each(array, chosenSort(array));
+    return result;
   };
 
 
