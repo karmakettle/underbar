@@ -87,7 +87,7 @@
         result.push(item);
       }
     });
-    
+
     return result;
   };
 
@@ -95,6 +95,10 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    var rejectTest = function(item) {
+      return test(item) ? false : item;
+    }
+    return _.filter(collection, rejectTest);
   };
 
   // Produce a duplicate-free version of the array.
