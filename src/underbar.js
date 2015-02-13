@@ -208,6 +208,15 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    var iterFcn = (iterator) ? iterator : _.identity;
+    return _.reduce(collection, function(doesMatch, item) {
+      if (!(doesMatch)) {
+        return false;
+      }
+      //Must cast to boolean in case 0 or 1 are passed in - KL
+      //0 && true returns 0. Must cast this to return false - KL
+      return Boolean(iterFcn(item) && doesMatch);
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
