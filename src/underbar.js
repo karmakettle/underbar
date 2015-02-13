@@ -215,7 +215,7 @@
       }
       //Must cast to boolean in case 0 or 1 are passed in - KL
       //0 && true returns 0. Must cast this to return false - KL
-      return Boolean(iterFcn(item) && doesMatch);
+      return Boolean(iterFcn(item)) && doesMatch;
     }, true);
   };
 
@@ -223,6 +223,17 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    //I tried to find the clever way, but I think I came across the convoluted...
+    //I mean, the creative... way - KL
+    var iterFcn = (iterator) ? iterator : _.identity;
+    var allTrue = _.every(collection, iterFcn);
+    var allFalse = _.every(collection, function(item) {
+      return !iterFcn(item);
+    });
+    if (collection.length === 0) {
+      return false;
+    }
+    return allTrue || (!allTrue && !allFalse);
   };
 
 
@@ -245,6 +256,14 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    _.each(args, function(item, index) {
+      _.each(item, function(value, key) {
+        obj[key] = value;
+      });
+    });
+
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
