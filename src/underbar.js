@@ -363,11 +363,13 @@
     var result = [];
     var nextIndex;
 
-    for (var i=0; i<array.length; i++) {
-      nextIndex = Math.floor(Math.random() * arrayCopy.length);
-      result.push(arrayCopy[nextIndex]);
-      arrayCopy.splice(nextIndex, 1);
-    }
+    do {
+      for (var i=0; i<array.length; i++) {
+        nextIndex = Math.floor(Math.random() * arrayCopy.length);
+        result.push(arrayCopy[nextIndex]);
+        arrayCopy.splice(nextIndex, 1);
+      }
+    } while (result === array);
 
     return result;
   };
