@@ -399,19 +399,31 @@
   _.sortBy = function(collection, iterator) {
     var func = typeof iterator === "string" ? function(item) { return item[iterator] } : iterator;
     var result = [];
-    var collectionCopy = {};
+    //2D array; stores [function-value, collection-item]
+    var collectionCopy = [];
+    var undefineds = [];
     for (var j=0; j<collection.length; j++) {
-      if (collection[j] === undefined) {
-        continue;
+      var val = func(collection[j])
+      if (val === undefined) {
+        undefineds.push(collection[j]);
       }
-      collectionCopy[func(collection[j])] = collection[j];
+      else {
+        collectionCopy.push([val, collection[j]]);
+      }
     }
-    for (var i=0; i<collection.length; i++) {
-      var minItem = Math.min.apply(null, Object.keys(collectionCopy));
-      result.push(collectionCopy[minItem]);
-      delete collectionCopy[minItem];
+    //put all function-values into value list and get the min
+    var collectionCopyLength = collectionCopy.length;
+    for (var i=0; i<collectionCopyLength; i++) {
+      var collectionVals = [];
+      for (var k=0; k<collectionCopy.length; k++) {
+        collectionVals.push(collectionCopy[k][0]);
+      }
+      var minItem = Math.min.apply(null, collectionVals);
+      var minItemIdx = _.indexOf(collectionVals, minItem);
+      result.push(collectionCopy[minItemIdx][1]);
+      collectionCopy.splice(minItemIdx, 1);
     }
-    return result;
+    return result.concat(undefineds);
   };
 
   // Zip together two or more arrays with elements of the same index
